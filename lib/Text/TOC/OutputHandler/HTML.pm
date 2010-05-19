@@ -1,0 +1,14 @@
+package Text::TOC::OutputHandler::HTML;
+
+use strict;
+use warnings;
+use namespace::autoclean;
+
+use Moose;
+use MooseX::StrictConstructor;
+
+with 'Text::TOC::Role::OutputHandler';
+
+__PACKAGE__->meta()->make_immutable();
+
+1;

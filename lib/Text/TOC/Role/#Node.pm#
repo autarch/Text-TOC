@@ -1,0 +1,15 @@
+package Text::TOC::Role::Node;
+
+use strict;
+use warnings;
+use namespace::autoclean;
+
+has type => (
+
+);
+
+has link => (
+
+);
+
+1;
