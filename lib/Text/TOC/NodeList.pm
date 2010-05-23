@@ -4,15 +4,16 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-use Text::TOC::Node;
+use Text::TOC::Types qw( ArrayRef Node );
 
 use Moose;
 use MooseX::StrictConstructor;
 
 has _nodes => (
     traits  => ['Array'],
-    is      => 'ro',
-    isa     => ArrayRef ['Text::TOC::Node'],
+    is      => 'bare',
+    isa     => ArrayRef [Node],
+    default => sub { [] },
     handles => {
         nodes    => 'elements',
         add_node => 'push',

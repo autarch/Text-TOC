@@ -6,6 +6,7 @@ use namespace::autoclean;
 
 use Moose::Role;
 
-requires 'filter_node';
+requires 'node_is_interesting';
+
 
 1;

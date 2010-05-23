@@ -6,6 +6,6 @@ use namespace::autoclean;
 
 use Moose::Role;
 
-requires qw( insert_toc insert_anchor );
+requires qw( process_node_list );
 
 1;
