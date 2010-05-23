@@ -17,7 +17,7 @@ has input_handler => (
     init_arg => undef,
     lazy     => 1,
     builder  => '_build_input_handler',
-    handles  => ['add_file'],
+    handles  => [ 'add_file', 'documents' ],
 );
 
 has filter => (

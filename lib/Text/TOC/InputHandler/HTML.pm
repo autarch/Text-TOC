@@ -25,13 +25,20 @@ has _counter => (
 __PACKAGE__->meta()->make_immutable();
 
 sub _process_file {
-    my $self = shift;
-    my $file = shift;
-
-    die "No such file: $file" unless -f $file;
+    my $self    = shift;
+    my $file    = shift;
+    my $content = shift;
 
     my $dom = HTML::DOM->new();
-    $dom->parse_file( $file->stringify() );
+
+    if ( !defined $content ) {
+        die "No such file: $file" unless -f $file;
+
+        $dom->parse_file( $file->stringify() );
+    }
+    else {
+        $dom->write($content);
+    }
 
     $self->_walk_nodes( $dom->body() || $dom, $file );
 

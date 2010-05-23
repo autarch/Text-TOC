@@ -7,9 +7,10 @@ use namespace::autoclean;
 use Path::Class qw( file );
 
 use Text::TOC::NodeList;
-use Text::TOC::Types qw( ArrayRef File Filter HashRef Node );
+use Text::TOC::Types qw( ArrayRef File Filter HashRef Node Str );
 
 use Moose::Role;
+use MooseX::Params::Validate qw( validated_list );
 
 requires '_process_file';
 
@@ -31,7 +32,7 @@ has _documents => (
     default => sub { {} },
     handles => {
         _add_document => 'set',
-        document      => 'elements',
+        documents     => 'values',
     },
 );
 
@@ -52,11 +53,15 @@ has node_list => (
 
 sub add_file {
     my $self = shift;
-    my $file = file(shift);
+    my ( $file, $content ) = validated_list(
+        \@_,
+        file    => { isa => File },
+        content => { isa => Str, optional => 1 },
+    );
 
     $self->_add_file($file);
 
-    my $document = $self->_process_file($file);
+    my $document = $self->_process_file( $file, $content );
 
     $self->_add_document( $file->stringify() => $document );
 
