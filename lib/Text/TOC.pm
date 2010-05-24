@@ -1,5 +1,7 @@
 package Text::TOC;
 
+1;
+
 # ABSTRACT: Build a table of contents from text documents
 
 =pod
