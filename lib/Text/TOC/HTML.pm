@@ -6,12 +6,13 @@ use namespace::autoclean;
 
 use Text::TOC::InputHandler::HTML;
 use Text::TOC::OutputHandler::HTML;
-use Text::TOC::Types qw( Filter );
+use Text::TOC::Types qw( Filter HashRef );
 
 use Moose;
+use MooseX::SemiAffordanceAccessor;
 use MooseX::StrictConstructor;
 
-has input_handler => (
+has _input_handler => (
     is       => 'ro',
     isa      => 'Text::TOC::InputHandler::HTML',
     init_arg => undef,
@@ -20,12 +21,13 @@ has input_handler => (
     handles  => [ 'add_file' ],
 );
 
-has filter => (
-    is     => 'rw',
-    writer => '_set_filter',
+has _input_handler_args => (
+    is       => 'rw',
+    isa      => HashRef,
+    init_arg => undef,
 );
 
-has output_handler => (
+has _output_handler => (
     is       => 'ro',
     isa      => 'Text::TOC::OutputHandler::HTML',
     init_arg => undef,
@@ -33,64 +35,63 @@ has output_handler => (
     builder  => '_build_output_handler',
 );
 
-has _link_generator => (
+has _output_handler_args => (
     is       => 'rw',
-    init_arg => 'link_generator',
-    writer   => '_set_link_generator',
-);
-
-has _style => (
-    is       => 'ro',
-    init_arg => 'style',
+    isa      => HashRef,
+    init_arg => undef,
 );
 
 my $single_filter = sub { $_[0]->tagName() =~ /^h[2-4]$/i };
 my $multi_filter  = sub { $_[0]->tagName() =~ /^h[1-4]$/i };
 
+my $single_link_generator = sub { return q{#} . $_[0]->anchor_name() };
+my $multi_link_generator = sub {
+    return 'file://' . $_[0]->source_file() . q{#} . $_[0]->anchor_name();
+};
+
 sub BUILD {
     my $self = shift;
     my $p    = shift;
 
-    my $filter;
-    if ( exists $p->{filter} && !ref $p->{filter} ) {
-        $filter
-            = $p->{filter} eq 'single' ? $single_filter
-            : $p->{filter} eq 'multi'  ? $multi_filter
-            :                            die "Invalid filter ($p->{filter})";
+    my %ih;
+    my %oh;
+
+    if ( delete $p->{multi} ) {
+        $ih{filter} = delete $p->{filter} || $multi_filter;
+        $oh{link_generator} = delete $p->{link_generator} || $multi_link_generator;
+    }
+    else {
+        $ih{filter} = delete $p->{filter} || $single_filter;
+        $oh{link_generator} = delete $p->{link_generator} || $single_link_generator;
     }
 
-    if ( !exists $p->{filter} ) {
-        $filter = $single_filter;
-    }
+    $oh{style} = delete $p->{style}
+        if exists $p->{style};
 
-    $self->_set_filter($filter) if $filter;
+    $self->_set_input_handler_args(\%ih);
+    $self->_set_output_handler_args(\%oh);
 
     return;
 }
 
 sub _build_input_handler {
     my $self = shift;
-    return Text::TOC::InputHandler::HTML->new( filter => $self->filter() );
+
+    return Text::TOC::InputHandler::HTML->new( $self->_input_handler_args() );
 }
 
 sub _build_output_handler {
     my $self = shift;
 
-    my %p;
-    $p{link_generator} = $self->_link_generator()
-        if $self->_link_generator();
-
-    $p{style} = $self->_style()
-        if $self->_style();
-
-    return Text::TOC::OutputHandler::HTML->new(%p);
+    return Text::TOC::OutputHandler::HTML->new(
+        $self->_output_handler_args() );
 }
 
 sub html_for_toc {
     my $self = shift;
 
-    return $self->output_handler()
-        ->process_node_list( $self->input_handler()->node_list() )
+    return $self->_output_handler()
+        ->process_node_list( $self->_input_handler()->node_list() )
         ->innerHTML();
 }
 
@@ -98,7 +99,7 @@ sub html_for_document {
     my $self = shift;
     my $path = shift;
 
-    my $doc = $self->input_handler()->document($path);
+    my $doc = $self->_input_handler()->document($path);
 
     return unless $doc;
 
@@ -117,8 +118,75 @@ __PACKAGE__->meta()->make_immutable();
 
   my $toc = Text::TOC::HTML->new();
 
-  $toc->add_file('path/to/file');
+  $toc->add_file( file => 'path/to/file' );
 
-  
+  print $toc->html_for_toc();
+  print $toc->html_for_document('path/to/file');
 
 =head1 DESCRIPTION
+
+This class provides a high-level API for generating a table of contents for
+one or more HTML documents.
+
+As each file is processed, it will be altered in order to add anchors for the
+table of contents. The end result is a single blob of HTML for the table of
+contents itself, and new HTML for each document.
+
+=head1 METHODS
+
+This class provides the following methods:
+
+=head2 Text::TOC::HTML->new()
+
+The constructor accepts several named parameters:
+
+=over 4
+
+=item * C<multi>
+
+This is a boolean indicating whether or not you want to build a multi-document
+table of contents. This is based on the I<output>, not the input. In other
+words, if you want the table of contents to link to multiple documents, set
+this to true.
+
+By default, this class assumes that you are just going to output a single
+document.
+
+The single vs multi choice affects the default filter for "interesting" nodes
+in a document, as well as link generation.
+
+The single-document filter looks for second- through fourth-level
+headings. The multi-document filter looks for first- through fourth-level
+headings.
+
+The single-document link generator simply generates a fragment link like
+"#foo". The multi-document link generator defaults to using the source file's
+file name as part of a "file://" URI. However, for multi-document output
+you'll almost certainly want to provide your own link generation.
+
+=item * C<link_generator>
+
+This is an optional subroutine reference that will be used to generate links
+in the table of contents. See above for a description of the defaults.
+
+This subroutine will be passed a single L<Text::TOC::Node::HTML> object, and
+is expected to return a string containing a URI.
+
+=item * C<style>
+
+This can be either "ordered" or "unordered". It determines the list tag used
+when creating HTML for the table of contents. The default is "unordered".
+
+=item * C<filter>
+
+You can provide a custom subroutine reference for filtering nodes. It will be
+called with one argument, an L<HTML::DOM::Node> object. It should return true
+if the node should be included in the table of contents, false otherwise.
+
+=back
+
+=head1 SUPPORT
+
+See L<Text::TOC> for details.
+
+=cut
