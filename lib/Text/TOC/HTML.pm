@@ -114,6 +114,9 @@ __PACKAGE__->meta()->make_immutable();
 
 =pod
 
+=for Pod::Coverage
+    BUILD
+
 =head1 SYNOPSIS
 
   my $toc = Text::TOC::HTML->new();
@@ -184,6 +187,30 @@ called with one argument, an L<HTML::DOM::Node> object. It should return true
 if the node should be included in the table of contents, false otherwise.
 
 =back
+
+=head2 $toc->add_file( file => $file, ... )
+
+This method adds a file to the table of contents. The file can be given as a
+string or as a L<Path::Class::File> object.
+
+This file will be read and processed for the table of contents.
+
+You can also provide an optional C<content> parameter, which contains the
+file's content. If this is provided, the file won't be read. This is useful if
+there is some pre-processing done to the file (for example, if it is a
+template of some sort).
+
+=head2 $toc->html_for_toc()
+
+Returns a blob of HTML that represents the table of contents for all the
+documents which have been processed.
+
+=head2 $toc->html_for_document($path)
+
+Given a path to a file which has been processed, this method returns the HTML
+for that document. The HTML will include the anchors added to support the
+table of contents.
+
 
 =head1 SUPPORT
 
