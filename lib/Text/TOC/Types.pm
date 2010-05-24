@@ -23,4 +23,4 @@ __PACKAGE__->provide_types_from(
 This class exports the types from L<Text::TOC::Types::Internal>,
 L<MooseX::Types::Moose> , and L<MooseX::Types::Path::Class>.
 
-=back
+=cut
