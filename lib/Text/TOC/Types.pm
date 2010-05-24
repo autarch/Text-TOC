@@ -13,3 +13,14 @@ __PACKAGE__->provide_types_from(
 );
 
 1;
+
+# ABSTRACT: Provides types for use in Text::TOC
+
+=pod
+
+=head1 DESCRIPTION
+
+This class exports the types from L<Text::TOC::Types::Internal>,
+L<MooseX::Types::Moose> , and L<MooseX::Types::Path::Class>.
+
+=back

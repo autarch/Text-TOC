@@ -211,9 +211,4 @@ Given a path to a file which has been processed, this method returns the HTML
 for that document. The HTML will include the anchors added to support the
 table of contents.
 
-
-=head1 SUPPORT
-
-See L<Text::TOC> for details.
-
 =cut

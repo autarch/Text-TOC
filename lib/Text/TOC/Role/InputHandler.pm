@@ -86,7 +86,7 @@ sub add_file {
 
 =head1 DESCRIPTION
 
-This role defines the API and partial implementation for input handlers
+This role defines the API and partial implementation for input handlers.
 
 =head1 REQUIRED METHODS
 

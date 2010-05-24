@@ -48,7 +48,7 @@ A L<Path::Class::File> object representing the source file for the node.
 
 =item * contents
 
-A L<HTML::DOM::Node> object representing the node and its contents.
+An L<HTML::DOM::Node> object representing the node and its contents.
 
 =back
 

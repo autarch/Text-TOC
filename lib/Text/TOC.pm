@@ -1,10 +1,14 @@
 package Text::TOC;
 
-1;
-
-# ABSTRACT: Build table of contents from text documents
+# ABSTRACT: Build a table of contents from text documents
 
 =pod
+
+=head1 DESCRIPTION
+
+This module is intended to provide a general framework for building a table of
+contents from one or more text documents. For now, it includes just one
+concrete implementation, L<Text::TOC::HTML>.
 
 =head1 SUPPORT
 

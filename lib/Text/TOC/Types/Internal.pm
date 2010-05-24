@@ -24,3 +24,13 @@ role_type Node, { role => 'Text::TOC::Role::Node' };
 require Text::TOC::Filter::Anon;
 
 1;
+
+# ABSTRACT: Defines types specific to Text::TOC
+
+=pod
+
+=head1 DESCRIPTION
+
+This class defines several types used internally in Text::TOC.
+
+=cut
