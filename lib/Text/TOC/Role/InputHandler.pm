@@ -8,6 +8,7 @@ use Path::Class qw( file );
 
 use Text::TOC::NodeList;
 use Text::TOC::Types qw( ArrayRef File Filter HashRef Node Str );
+use Tie::IxHash;
 
 use Moose::Role;
 use MooseX::Params::Validate qw( validated_list );
@@ -26,13 +27,13 @@ has _files => (
 );
 
 has _documents => (
-    traits  => ['Hash'],
     is      => 'bare',
-    isa     => HashRef,
-    default => sub { {} },
+    isa     => 'Tie::IxHash',
+    default => sub { Tie::IxHash->new() },
     handles => {
-        _add_document => 'set',
-        documents     => 'values',
+        _add_document => 'STORE',
+        documents     => 'Values',
+        document      => 'FETCH',
     },
 );
 
@@ -55,7 +56,7 @@ sub add_file {
     my $self = shift;
     my ( $file, $content ) = validated_list(
         \@_,
-        file    => { isa => File },
+        file    => { isa => File, coerce => 1 },
         content => { isa => Str, optional => 1 },
     );
 

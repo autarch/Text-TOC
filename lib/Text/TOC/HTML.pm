@@ -17,7 +17,7 @@ has input_handler => (
     init_arg => undef,
     lazy     => 1,
     builder  => '_build_input_handler',
-    handles  => [ 'add_file', 'documents' ],
+    handles  => [ 'add_file' ],
 );
 
 has filter => (
@@ -86,13 +86,39 @@ sub _build_output_handler {
     return Text::TOC::OutputHandler::HTML->new(%p);
 }
 
-sub toc {
+sub html_for_toc {
     my $self = shift;
 
     return $self->output_handler()
-        ->process_node_list( $self->input_handler()->node_list() );
+        ->process_node_list( $self->input_handler()->node_list() )
+        ->innerHTML();
+}
+
+sub html_for_document {
+    my $self = shift;
+    my $path = shift;
+
+    my $doc = $self->input_handler()->document($path);
+
+    return unless $doc;
+
+    return $doc->innerHTML();
 }
 
 __PACKAGE__->meta()->make_immutable();
 
 1;
+
+# ABSTRACT: Build a table contents for one or more HTML documents
+
+=pod
+
+=head1 SYNOPSIS
+
+  my $toc = Text::TOC::HTML->new();
+
+  $toc->add_file('path/to/file');
+
+  
+
+=head1 DESCRIPTION
