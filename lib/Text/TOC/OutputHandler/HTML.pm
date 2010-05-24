@@ -23,9 +23,7 @@ has _link_generator => (
     is       => 'ro',
     isa      => CodeRef,
     init_arg => 'link_generator',
-    default  => sub {
-        sub { $_[0]->_default_link( $_[1] ) }
-    },
+    required => 1,
 );
 
 has _style => (
@@ -37,8 +35,8 @@ has _style => (
 
 
 sub process_node_list {
-    my $self      = shift;
-    my $node_list = shift;
+    my $self  = shift;
+    my $nodes = shift;
 
     my $toc = $self->_toc();
 
@@ -52,7 +50,7 @@ sub process_node_list {
     my $level = 1;
     my $last_node;
 
-    for my $node ( $node_list->nodes() ) {
+    for my $node ( @{$nodes} ) {
         $self->_insert_anchor($node);
 
         my $diff = $self->_node_level_difference( $node, $last_node );
@@ -78,7 +76,7 @@ sub process_node_list {
         my $li   = $toc->createElement('li');
         my $link = $toc->createElement('a');
         $link->setAttribute(
-            href => $self->_link_generator->( $self, $node ) );
+            href => $self->_link_generator->( $node ) );
         $link->appendChild( $toc->createTextNode( $node->contents()->as_text() ) );
 
         $li->appendChild($link);
@@ -119,13 +117,6 @@ sub _node_level_difference {
     }
 }
 
-sub _default_link {
-    my $self = shift;
-    my $node = shift;
-
-    return q{#} . $node->anchor_name();
-}
-
 sub _insert_anchor {
     my $self = shift;
     my $node = shift;
@@ -139,13 +130,26 @@ sub _insert_anchor {
     return;
 }
 
-sub add_node_to_toc {
-    my $self = shift;
-    my $node = shift;
-
-
-}
-
 __PACKAGE__->meta()->make_immutable();
 
 1;
+
+# ABSTRACT: Implements an output handler for HTML documents
+
+=pod
+
+=for Pod::Coverage
+    process_node_list
+
+=head1 DESCRIPTION
+
+This class is responsible for generating a complete table of contents, and
+inserting anchors into an HTML node.
+
+It has no end-user facing parts at the moment.
+
+=head1 ROLES
+
+This class does the L<Text::TOC::Role::OutputHandler> role.
+
+=cut

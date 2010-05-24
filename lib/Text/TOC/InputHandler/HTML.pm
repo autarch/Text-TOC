@@ -30,15 +30,7 @@ sub _process_file {
     my $content = shift;
 
     my $dom = HTML::DOM->new();
-
-    if ( !defined $content ) {
-        die "No such file: $file" unless -f $file;
-
-        $dom->parse_file( $file->stringify() );
-    }
-    else {
-        $dom->write($content);
-    }
+    $dom->write($content);
 
     $self->_walk_nodes( $dom->body() || $dom, $file );
 
@@ -76,7 +68,7 @@ sub _save_node {
         source_file => $file,
     );
 
-    $self->node_list()->add_node($wrapped);
+    $self->_add_node($wrapped);
 
     return;
 }
@@ -97,3 +89,20 @@ sub _anchor_name {
 }
 
 1;
+
+# ABSTRACT: Implements an input handler for HTML documents
+
+=pod
+
+=head1 DESCRIPTION
+
+This class processes an HTML document and finds nodes which should be included
+in the table of contents.
+
+It has no end-user facing parts at the moment.
+
+=head1 ROLES
+
+This class does the L<Text::TOC::Role::InputHandler> role.
+
+=cut

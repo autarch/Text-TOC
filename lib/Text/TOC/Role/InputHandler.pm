@@ -4,9 +4,8 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
+use File::Slurp qw( read_file );
 use Path::Class qw( file );
-
-use Text::TOC::NodeList;
 use Text::TOC::Types qw( ArrayRef File Filter HashRef Node Str );
 use Tie::IxHash;
 
@@ -44,12 +43,14 @@ has _filter => (
     init_arg => 'filter',
 );
 
-has node_list => (
-    is       => 'ro',
-    isa      => 'Text::TOC::NodeList',
-    init_arg => undef,
-    lazy     => 1,
-    default  => sub { Text::TOC::NodeList->new() },
+has nodes => (
+    traits  => ['Array'],
+    is      => 'ro',
+    isa     => ArrayRef [Node],
+    default => sub { [] },
+    handles => {
+        _add_node => 'push',
+    },
 );
 
 sub add_file {
@@ -62,6 +63,11 @@ sub add_file {
 
     $self->_add_file($file);
 
+    unless ( defined $content ) {
+        die "No such file: $file" unless -f $file;
+        $content = read_file( $file->stringify() );
+    }
+
     my $document = $self->_process_file( $file, $content );
 
     $self->_add_document( $file->stringify() => $document );
@@ -70,3 +76,25 @@ sub add_file {
 }
 
 1;
+
+# ABSTRACT: A role for input handlers
+
+=pod
+
+=for Pod::Coverage
+    add_file
+
+=head1 DESCRIPTION
+
+This role defines the API and partial implementation for input handlers
+
+=head1 REQUIRED METHODS
+
+This role requires one method:
+
+=head2 $handler->_process_file( $file, $content )
+
+This method will receive a L<Path::Class::File> object as its first
+argument and the file's content as its second.
+
+=cut

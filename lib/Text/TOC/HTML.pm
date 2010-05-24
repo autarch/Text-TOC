@@ -91,7 +91,7 @@ sub html_for_toc {
     my $self = shift;
 
     return $self->_output_handler()
-        ->process_node_list( $self->_input_handler()->node_list() )
+        ->process_node_list( $self->_input_handler()->nodes() )
         ->innerHTML();
 }
 

@@ -225,40 +225,40 @@ EOF
 }
 
 {
-    my $gen = Text::TOC::HTML->new( filter => 'multi' );
+    my $gen = Text::TOC::HTML->new( multi => 1 );
     $gen->add_file( file => file( 't', 'corpus', 'headers.html' ) );
 
     my $toc_html = <<'EOF';
 <ul>
   <li>
-    <a href="#Page_Title-0">Page Title</a>
+    <a href="file://t/corpus/headers.html#Page_Title-0">Page Title</a>
     <ul>
       <li>
-        <a href="#H2_A-1">H2 A</a>
+        <a href="file://t/corpus/headers.html#H2_A-1">H2 A</a>
         <ul>
           <li>
-            <a href="#H3_A-2">H3 A</a>
+            <a href="file://t/corpus/headers.html#H3_A-2">H3 A</a>
             <ul>
               <li>
-                <a href="#H4_A-3">H4 A</a>
+                <a href="file://t/corpus/headers.html#H4_A-3">H4 A</a>
               </li>
             </ul>
           </li>
         </ul>
       </li>
       <li>
-        <a href="#H2_B-4">H2 B</a>
+        <a href="file://t/corpus/headers.html#H2_B-4">H2 B</a>
       </li>
       <li>
-        <a href="#H2_C-5">H2 C</a>
+        <a href="file://t/corpus/headers.html#H2_C-5">H2 C</a>
       </li>
       <li>
-        <a href="#H2_D-6">H2 D</a>
+        <a href="file://t/corpus/headers.html#H2_D-6">H2 D</a>
         <ul>
           <li>
             <ul>
               <li>
-                <a href="#H4_B-7">H4 B</a>
+                <a href="file://t/corpus/headers.html#H4_B-7">H4 B</a>
               </li>
             </ul>
           </li>
@@ -277,41 +277,41 @@ EOF
 }
 
 {
-    my $gen = Text::TOC::HTML->new( filter => 'multi' );
+    my $gen = Text::TOC::HTML->new( multi => 1 );
     $gen->add_file( file => file( 't', 'corpus', 'headers.html' ) );
     $gen->add_file( file => file( 't', 'corpus', 'more.html' ) );
 
     my $toc_html = <<'EOF';
 <ul>
   <li>
-    <a href="#Page_Title-0">Page Title</a>
+    <a href="file://t/corpus/headers.html#Page_Title-0">Page Title</a>
     <ul>
       <li>
-        <a href="#H2_A-1">H2 A</a>
+        <a href="file://t/corpus/headers.html#H2_A-1">H2 A</a>
         <ul>
           <li>
-            <a href="#H3_A-2">H3 A</a>
+            <a href="file://t/corpus/headers.html#H3_A-2">H3 A</a>
             <ul>
               <li>
-                <a href="#H4_A-3">H4 A</a>
+                <a href="file://t/corpus/headers.html#H4_A-3">H4 A</a>
               </li>
             </ul>
           </li>
         </ul>
       </li>
       <li>
-        <a href="#H2_B-4">H2 B</a>
+        <a href="file://t/corpus/headers.html#H2_B-4">H2 B</a>
       </li>
       <li>
-        <a href="#H2_C-5">H2 C</a>
+        <a href="file://t/corpus/headers.html#H2_C-5">H2 C</a>
       </li>
       <li>
-        <a href="#H2_D-6">H2 D</a>
+        <a href="file://t/corpus/headers.html#H2_D-6">H2 D</a>
         <ul>
           <li>
             <ul>
               <li>
-                <a href="#H4_B-7">H4 B</a>
+                <a href="file://t/corpus/headers.html#H4_B-7">H4 B</a>
               </li>
             </ul>
           </li>
@@ -320,10 +320,10 @@ EOF
     </ul>
   </li>
   <li>
-    <a href="#More_Page!-8">More Page!</a>
+    <a href="file://t/corpus/more.html#More_Page!-8">More Page!</a>
     <ul>
       <li>
-        <a href="#Header_2-9">Header 2</a>
+        <a href="file://t/corpus/more.html#Header_2-9">Header 2</a>
       </li>
     </ul>
   </li>
