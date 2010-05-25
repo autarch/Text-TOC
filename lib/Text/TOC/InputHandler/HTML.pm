@@ -80,8 +80,13 @@ sub _anchor_name {
     my $text_contents = $domlet->as_text();
 
     $text_contents =~ s/\s+/_/g;
+    # These are the only characters allowed in a name according to the HTML
+    # spec.
+    $text_contents =~ s/[^A-Za-z0-9-_:.]//g;
 
     my $name = encode_entities($text_contents) . q{-} . $self->_counter();
+    # Anchors must begin with a letter.
+    $name = 'A-' . $name unless $name =~ /^[A-Za-z]/;
 
     $self->_inc_counter();
 

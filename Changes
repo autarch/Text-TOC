@@ -1,3 +1,10 @@
+0.03    2010-05-25
+
+- Anchors cannot contain anything but letters, numbers, and a few punctuation
+  characters. An anchor must start with a letter. This module now generates
+  spec-compliant anchors.
+
+
 0.02    2010-05-25
 
 - Added a compilation test, because if all tests are skipped cpan testers

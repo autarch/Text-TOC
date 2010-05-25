@@ -320,10 +320,13 @@ EOF
     </ul>
   </li>
   <li>
-    <a href="file://t/corpus/more.html#More_Page!-8">More Page!</a>
+    <a href="file://t/corpus/more.html#More_Page-8">More Page!</a>
     <ul>
       <li>
         <a href="file://t/corpus/more.html#Header_2-9">Header 2</a>
+      </li>
+      <li>
+        <a href="file://t/corpus/more.html#A-1001001-10">1001001</a>
       </li>
     </ul>
   </li>
