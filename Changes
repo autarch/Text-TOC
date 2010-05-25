@@ -1,3 +1,9 @@
+0.02    2010-05-25
+
+- Added a compilation test, because if all tests are skipped cpan testers
+  report it as a failure (which is its own wtf).
+
+
 0.01    2010-05-24
 
 - First release upon an unsuspecting world.
