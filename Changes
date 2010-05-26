@@ -1,3 +1,8 @@
+0.04    2010-05-26
+
+- Previous releases were missing some prereqs. Hopefully this one fixes that.
+
+
 0.03    2010-05-25
 
 - Anchors cannot contain anything but letters, numbers, and a few punctuation
