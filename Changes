@@ -1,3 +1,10 @@
+0.05    2010-05-29
+
+- I explicitly removed HTML::Tidy from the list of prereqs, since as of right
+  now this module almost never seems to install cleanly, and it's just an
+  optional testing module anyway.
+
+
 0.04    2010-05-26
 
 - Previous releases were missing some prereqs. Hopefully this one fixes that.
