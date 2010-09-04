@@ -342,6 +342,37 @@ EOF
 
 {
     my $gen = Text::TOC::HTML->new();
+    my $file = file( 't', 'corpus', 'out-of-order-headers.html' );
+    $gen->add_file( file => $file );
+
+    my $toc_html = <<'EOF';
+<ul>
+  <li>
+    <ul>
+      <li>
+        <a href="#H3_A-0">H3 A</a>
+      </li>
+    </ul>
+  <li>
+    <a href="#H2-1">H2</a>
+    <ul>
+      <li>
+        <a href="#H3_B-2">H3 B</a>
+      </li>
+    </ul>
+  </li>
+</ul>
+EOF
+
+    html_output_ok(
+        $gen->html_for_toc(),
+        $toc_html,
+        'can handle out of order headers (first h3 before first h2)'
+    );
+}
+
+{
+    my $gen = Text::TOC::HTML->new();
     my $file = file( 't', 'corpus', 'headers.html' )->stringify();
 
     lives_ok { $gen->add_file( file => $file ) }

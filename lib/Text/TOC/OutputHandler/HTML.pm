@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
+use List::AllUtils qw( max );
 use Text::TOC::Types qw( CodeRef Str );
 
 use Moose;
@@ -45,15 +46,20 @@ sub process_node_list {
     my $list = $toc->createElement($list_tag);
     $toc->appendChild($list);
 
+    my $max_level = max map { $self->_node_level($_) } @{$nodes};
+
     my @lists = $list;
 
-    my $level = 1;
     my $last_node;
 
     for my $node ( @{$nodes} ) {
         $self->_insert_anchor($node);
 
-        my $diff = $self->_node_level_difference( $node, $last_node );
+        my $diff
+            = $last_node
+            ? $self->_node_level_difference( $node, $last_node )
+            : $max_level - $self->_node_level($node);
+
         if ( $diff > 0 ) {
             for ( 1..$diff ) {
                 my $new_list = $toc->createElement($list_tag);
