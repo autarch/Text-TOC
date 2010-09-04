@@ -1,3 +1,10 @@
+0.06    2010-09-04
+
+- If a document contained lower-level elements before higher-level, for
+  example an HTML doc where the first <h3> precedes the first <h2>, then the
+  TOC generation code blew up.
+
+
 0.05    2010-05-29
 
 - I explicitly removed HTML::Tidy from the list of prereqs, since as of right
