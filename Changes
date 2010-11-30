@@ -1,3 +1,8 @@
+0.07    2010-11-30
+
+- Fix a load order issue with the latest version of MooseX::Types.
+
+
 0.06    2010-09-04
 
 - If a document contained lower-level elements before higher-level, for
