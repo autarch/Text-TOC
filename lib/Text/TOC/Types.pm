@@ -12,6 +12,8 @@ __PACKAGE__->provide_types_from(
         )
 );
 
+require Text::TOC::Filter::Anon;
+
 1;
 
 # ABSTRACT: Provides types for use in Text::TOC
