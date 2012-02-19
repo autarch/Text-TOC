@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+- Require namespace::autoclean 0.12. Fixes RT #73640.
+
 
 0.07    2010-11-30
 
