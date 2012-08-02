@@ -106,7 +106,7 @@ sub html_for_document {
     return $doc->innerHTML();
 }
 
-sub body_for_document {
+sub html_for_document_body {
     my $self = shift;
     my $path = shift;
 
@@ -141,7 +141,7 @@ __PACKAGE__->meta()->make_immutable();
 
   print $toc->html_for_toc();
   print $toc->html_for_document('path/to/file');
-  print $toc->body_for_document('path/to/file');
+  print $toc->html_for_document_body('path/to/file');
 
 =head1 DESCRIPTION
 
@@ -228,7 +228,7 @@ Given a path to a file which has been processed, this method returns the HTML
 for that document. The HTML will include the anchors added to support the
 table of contents.
 
-=head2 $toc->body_for_document($path)
+=head2 $toc->html_for_document_body($path)
 
 Given a path to a file which has been processed, this method returns the HTML
 body for that document. This is all the HTML between the C<< <body> >> and C<<

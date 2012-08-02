@@ -126,7 +126,7 @@ EOF
     );
 
     html_output_ok(
-        $gen->body_for_document($file),
+        $gen->html_for_document_body($file),
         $page_html,
         'unordered list for single-document TOC'
     );
