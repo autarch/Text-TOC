@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Added a Text::TOC::HTML->body_for_document() method. This returns the
+  contents of the HTML body without the surrounding <body> and <html> tags.
+
+
 0.08    2012-02-19
 
 - Require namespace::autoclean 0.12. Fixes RT #73640.
