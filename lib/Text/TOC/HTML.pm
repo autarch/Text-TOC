@@ -2,7 +2,7 @@ package Text::TOC::HTML;
 
 use strict;
 use warnings;
-use namespace::autoclean;
+use namespace::autoclean 0.12;
 
 use Text::TOC::InputHandler::HTML;
 use Text::TOC::OutputHandler::HTML;
