@@ -41,6 +41,14 @@ has _output_handler_args => (
     init_arg => undef,
 );
 
+has _toc_document => (
+    is       => 'ro',
+    isa      => 'HTML::DOM',
+    init_arg => undef,
+    lazy     => 1,
+    builder  => '_build_toc_document',
+);
+
 my $single_filter = sub { $_[0]->tagName() =~ /^h[2-4]$/i };
 my $multi_filter  = sub { $_[0]->tagName() =~ /^h[1-4]$/i };
 
@@ -90,14 +98,22 @@ sub _build_output_handler {
 sub html_for_toc {
     my $self = shift;
 
+    return $self->_toc_document()->innerHTML();
+}
+
+sub _build_toc_document {
+    my $self = shift;
+
     return $self->_output_handler()
-        ->process_node_list( $self->_input_handler()->nodes() )
-        ->innerHTML();
+        ->process_node_list( $self->_input_handler()->nodes() );
 }
 
 sub html_for_document {
     my $self = shift;
     my $path = shift;
+
+    # Building this also updates the original document with the target nodes.
+    $self->_toc_document();
 
     my $doc = $self->_input_handler()->document($path);
 
@@ -109,6 +125,9 @@ sub html_for_document {
 sub html_for_document_body {
     my $self = shift;
     my $path = shift;
+
+    # Building this also updates the original document with the target nodes.
+    $self->_toc_document();
 
     my $doc = $self->_input_handler()->document($path);
 

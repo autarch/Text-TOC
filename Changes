@@ -3,6 +3,10 @@
 - Added a Text::TOC::HTML->body_for_document() method. This returns the
   contents of the HTML body without the surrounding <body> and <html> tags.
 
+- There was a bug when a document's body was retrieved before the TOC
+  document. The document would not be marked up with the anchor targets needed
+  for the TOC.
+
 
 0.08    2012-02-19
 
